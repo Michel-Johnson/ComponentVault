@@ -10,13 +10,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { search, category } = req.query;
       
-      let components;
+      let components = await storage.getComponents();
+      
+      // Apply category filter first
+      if (category && category !== "All Categories") {
+        components = components.filter(component => component.category === category);
+      }
+      
+      // Apply search filter to the results
       if (search) {
-        components = await storage.searchComponents(search as string);
-      } else if (category && category !== "All Categories") {
-        components = await storage.getComponentsByCategory(category as string);
-      } else {
-        components = await storage.getComponents();
+        const lowerQuery = (search as string).toLowerCase();
+        components = components.filter(component =>
+          component.name.toLowerCase().includes(lowerQuery) ||
+          component.description.toLowerCase().includes(lowerQuery) ||
+          component.category.toLowerCase().includes(lowerQuery) ||
+          component.location.toLowerCase().includes(lowerQuery)
+        );
       }
       
       res.json(components);

@@ -15,6 +15,9 @@ export const components = pgTable("components", {
 
 export const insertComponentSchema = createInsertSchema(components).omit({
   id: true,
+}).extend({
+  quantity: z.number().int().min(0, "Quantity must be 0 or greater"),
+  minStockLevel: z.number().int().min(0, "Minimum stock level must be 0 or greater")
 });
 
 export const updateComponentSchema = insertComponentSchema.partial();

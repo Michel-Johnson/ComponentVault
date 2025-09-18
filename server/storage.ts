@@ -30,7 +30,7 @@ export class MemStorage implements IStorage {
     this.initializeSampleData();
   }
 
-  private async initializeSampleData() {
+  private initializeSampleData() {
     const sampleComponents: InsertComponent[] = [
       {
         name: "ATmega328P-PU",
@@ -75,7 +75,17 @@ export class MemStorage implements IStorage {
     ];
 
     for (const comp of sampleComponents) {
-      await this.createComponent(comp);
+      const id = randomUUID();
+      const component: Component = { 
+        id,
+        name: comp.name,
+        category: comp.category,
+        quantity: comp.quantity ?? 0,
+        location: comp.location,
+        description: comp.description,
+        minStockLevel: comp.minStockLevel ?? 10
+      };
+      this.components.set(id, component);
     }
   }
 
