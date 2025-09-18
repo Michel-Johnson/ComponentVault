@@ -1,0 +1,47 @@
+[
+  {
+    "id": "3edd6a92-bf05-49a9-9c36-71d142722c81",
+    "name": "ATmega328P-PU",
+    "category": "Integrated Circuits",
+    "quantity": 100,
+    "location": "A1-B3",
+    "description": "8-bit AVR Microcontroller",
+    "minStockLevel": 10
+  },
+  {
+    "id": "4bde2f7b-624e-4df4-9aab-30af2b4fd180",
+    "name": "470µF Electrolytic",
+    "category": "Capacitors",
+    "quantity": 8,
+    "location": "C2-A1",
+    "description": "25V Radial Electrolytic Capacitor",
+    "minStockLevel": 20
+  },
+  {
+    "id": "cf325df3-0e6d-4093-8d0e-d811e4286f89",
+    "name": "10kΩ Resistor",
+    "category": "Resistors",
+    "quantity": 250,
+    "location": "R1-A5",
+    "description": "1/4W Carbon Film Resistor",
+    "minStockLevel": 50
+  },
+  {
+    "id": "c0491acc-b372-43b6-a041-931b8555310b",
+    "name": "2N3904 NPN",
+    "category": "Transistors",
+    "quantity": 0,
+    "location": "T1-C2",
+    "description": "General Purpose NPN Transistor",
+    "minStockLevel": 15
+  },
+  {
+    "id": "3dbe42f9-5699-4bcc-be20-21060be65803",
+    "name": "1N4148 Diode",
+    "category": "Diodes",
+    "quantity": 5,
+    "location": "D1-A2",
+    "description": "High-speed switching diode",
+    "minStockLevel": 25
+  }
+]
