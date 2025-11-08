@@ -2,6 +2,24 @@
 这是一个管理电子元件的软件，采用网站来作为UI交互，可以将数据存储到本地。目前支持Linux系统部署。
 该软件通过Replit生成，已经具备基本功能，满足作者日常使用，后续不再维护。
 
+## 配置教程
+
+使用系统：Ubuntu 24.04
+
+1. 下载github的仓库源码
+
+2. 在ubuntu中安装好以下配置
+   注意：nodejs版本要高于20
+
+   ```
+   sudo apt install npm
+   npm install -g tsx
+   ```
+
+3. 运行：`npm run dev`
+
+浏览器中输入http://localhost:5000，即可运行
+
 
 下面是Replit生成的软件简介。
 
