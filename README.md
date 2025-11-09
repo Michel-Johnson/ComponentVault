@@ -55,6 +55,13 @@
 
 4. 运行：`npm run dev`
 
+- 如果出现：“在此系统上禁止运行脚本”
+  SecurityError: ( ) [], PSSecurityException
+  FullyQualifiedErrorId : UnauthorizedAccess 
+  这个问题很简单，请借助AI去解决，因为涉及到安全性问题，这里不提供代码
+
+- 如果无法识别cross-env,请安装cross-env:   `npm install --save-dev cross-env`   执行`npm list cross-env`检查安装是否成功
+
 浏览器中输入`localhost:5000`，即可运行
 
 此外，我在windows中写了一个脚本，在项目中它是ComponentVault.txt文件，你需要将`cd /d "D:\components_vault\ComponentVault"`修改为你自己的路径，然后将后缀改为.bat，即可运行。点击就能直接跳出浏览器页面。图标也在仓库中，命名为ComponentVault.ico
