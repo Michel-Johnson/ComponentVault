@@ -23,7 +23,7 @@
 ### 使用系统：Windows 11
 
 1. 下载github的仓库源码
-2. 下载nodejs，要求版本大于20
+2. 下载nodejs，要求版本大于20,，可以参考[Node.js 下载安装与环境配置全流程](https://blog.csdn.net/Natsuago/article/details/145567734)
 3. 修改package.json中的
 
 ```json
