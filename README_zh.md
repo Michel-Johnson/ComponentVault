@@ -1,4 +1,8 @@
 # ComponentVault
+------
+
+**Read this in other languages: [English](README.md), [中文](README_zh.md).**
+
 这是一个管理电子元件的软件，采用网站来作为UI交互，可以将数据存储到本地。目前支持Linux系统部署。
 该软件通过Replit生成，已经具备基本功能，满足作者日常使用，后续不再维护。
 
