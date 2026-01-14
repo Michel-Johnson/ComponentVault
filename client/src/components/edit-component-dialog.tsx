@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/language-context";
 import { apiRequest } from "@/lib/queryClient";
-import { updateComponentSchema, COMPONENT_CATEGORIES, type Component } from "@shared/schema";
+import { updateComponentSchema, COMPONENT_CATEGORIES, CATEGORY_SPEC_FIELDS, type Component } from "@shared/schema";
 import { z } from "zod";
 
 interface EditComponentDialogProps {
@@ -18,6 +19,7 @@ interface EditComponentDialogProps {
 }
 
 export default function EditComponentDialog({ component, open, onOpenChange }: EditComponentDialogProps) {
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -26,6 +28,7 @@ export default function EditComponentDialog({ component, open, onOpenChange }: E
     description: "",
     minStockLevel: ""
   });
+  const [specifications, setSpecifications] = useState<any>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const queryClient = useQueryClient();
@@ -41,6 +44,7 @@ export default function EditComponentDialog({ component, open, onOpenChange }: E
         description: component.description,
         minStockLevel: component.minStockLevel.toString()
       });
+      setSpecifications(component.specifications || {});
     }
   }, [component]);
 
@@ -80,7 +84,8 @@ export default function EditComponentDialog({ component, open, onOpenChange }: E
         quantity: parseInt(formData.quantity) || 0,
         location: formData.location,
         description: formData.description,
-        minStockLevel: parseInt(formData.minStockLevel) || 10
+        minStockLevel: parseInt(formData.minStockLevel) || 10,
+        specifications: Object.keys(specifications).length > 0 ? specifications : undefined
       });
 
       updateComponentMutation.mutate(validatedData);
@@ -103,6 +108,13 @@ export default function EditComponentDialog({ component, open, onOpenChange }: E
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
   };
+  
+  const updateSpecification = (key: string, value: string) => {
+    setSpecifications((prev: any) => ({ ...prev, [key]: value }));
+  };
+  
+  // 获取当前类别的参数字段
+  const specFields = CATEGORY_SPEC_FIELDS[formData.category as keyof typeof CATEGORY_SPEC_FIELDS] || [];
 
   if (!component) return null;
 
@@ -178,6 +190,30 @@ export default function EditComponentDialog({ component, open, onOpenChange }: E
             />
             {errors.minStockLevel && <p className="text-sm text-destructive mt-1">{errors.minStockLevel}</p>}
           </div>
+
+          {/* 根据类别显示特定参数字段 */}
+          {specFields.length > 0 && (
+            <div className="space-y-4 border-t pt-4">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                {language === 'zh' ? '元件参数' : 'Component Specifications'}
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {specFields.map((field) => (
+                  <div key={field.key}>
+                    <Label htmlFor={`spec-${field.key}`}>
+                      {language === 'zh' ? field.labelZh : field.label}
+                    </Label>
+                    <Input
+                      id={`spec-${field.key}`}
+                      value={specifications[field.key] || ''}
+                      onChange={(e) => updateSpecification(field.key, e.target.value)}
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <Label htmlFor="description">Description</Label>

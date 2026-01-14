@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Box, AlertTriangle, Tag, DollarSign } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
 
 export default function StatsOverview() {
+  const { t } = useLanguage();
+  
   const { data: stats } = useQuery({
     queryKey: ["/api/stats"],
     queryFn: async () => {
@@ -14,28 +17,28 @@ export default function StatsOverview() {
 
   const statCards = [
     {
-      title: "Total Components",
+      title: t("stats.totalComponents"),
       value: stats?.totalComponents || 0,
       icon: Box,
       color: "blue",
       testId: "stat-total-components"
     },
     {
-      title: "Low Stock Items", 
+      title: t("stats.lowStockItems"), 
       value: stats?.lowStockCount || 0,
       icon: AlertTriangle,
       color: "amber",
       testId: "stat-low-stock"
     },
     {
-      title: "Categories",
+      title: t("stats.categories"),
       value: stats?.categories || 0, 
       icon: Tag,
       color: "green",
       testId: "stat-categories"
     },
     {
-      title: "Total Quantity",
+      title: t("stats.totalQuantity"),
       value: stats?.totalQuantity || 0,
       icon: DollarSign,
       color: "purple",
@@ -48,10 +51,10 @@ export default function StatsOverview() {
       {statCards.map((stat) => {
         const Icon = stat.icon;
         const colorClass = {
-          blue: "bg-blue-100 text-blue-600",
-          amber: "bg-amber-100 text-amber-600", 
-          green: "bg-green-100 text-green-600",
-          purple: "bg-purple-100 text-purple-600"
+          blue: "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400",
+          amber: "bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-400", 
+          green: "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400",
+          purple: "bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400"
         }[stat.color];
 
         return (
@@ -60,7 +63,7 @@ export default function StatsOverview() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">{stat.title}</p>
-                  <p className={`text-2xl font-bold ${stat.color === 'amber' ? 'text-amber-600' : 'text-foreground'}`} data-testid={stat.testId}>
+                  <p className={`text-2xl font-bold ${stat.color === 'amber' ? 'text-amber-600 dark:text-amber-400' : 'text-foreground'}`} data-testid={stat.testId}>
                     {stat.value}
                   </p>
                 </div>

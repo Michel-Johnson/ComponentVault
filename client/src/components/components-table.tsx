@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Eye, Edit, Trash2, Plus, Minus, Microchip, Circle, Zap, ArrowUp } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/language-context";
 import type { Component } from "@shared/schema";
 import EditComponentDialog from "@/components/edit-component-dialog";
 import DeleteComponentDialog from "@/components/delete-component-dialog";
@@ -23,6 +24,7 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
   const [deletingComponent, setDeletingComponent] = useState<Component | null>(null);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const updateQuantityMutation = useMutation({
     mutationFn: async ({ id, quantity }: { id: string; quantity: number }) => {
@@ -48,11 +50,11 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
 
   const getStatusInfo = (component: Component) => {
     if (component.quantity === 0) {
-      return { label: "Out of Stock", color: "destructive", dotColor: "bg-red-400" };
+      return { label: t("table.outOfStock"), color: "destructive", dotColor: "bg-red-400" };
     } else if (component.quantity <= component.minStockLevel) {
-      return { label: "Low Stock", color: "secondary", dotColor: "bg-amber-400" };
+      return { label: t("table.lowStock"), color: "secondary", dotColor: "bg-amber-400" };
     } else {
-      return { label: "In Stock", color: "secondary", dotColor: "bg-green-400" };
+      return { label: t("table.inStock"), color: "secondary", dotColor: "bg-green-400" };
     }
   };
 
@@ -104,7 +106,7 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
       <Card className="shadow-sm">
         <div className="p-12 text-center">
           <Microchip className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">No components found</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-2">{t("table.noComponents")}</h3>
           <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
         </div>
       </Card>
@@ -118,23 +120,26 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
           <Table>
             <TableHeader className="bg-muted">
               <TableRow>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Component
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.component")}
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Category
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.category")}
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Quantity
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.quantity")}
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Location
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.location")}
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Status
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.specifications")}
                 </TableHead>
-                <TableHead className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Actions
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.status")}
+                </TableHead>
+                <TableHead className="px-6 py-3 text-left text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                  {t("table.actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -151,7 +156,7 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
                           <Icon className="text-blue-600 h-5 w-5" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-foreground" data-testid={`text-component-name-${component.id}`}>
+                          <div className="text-base font-medium text-foreground" data-testid={`text-component-name-${component.id}`}>
                             {component.name}
                           </div>
                           <div className="text-sm text-muted-foreground" data-testid={`text-component-description-${component.id}`}>
@@ -161,8 +166,8 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4">
-                      <Badge className={getCategoryColor(component.category)} data-testid={`badge-category-${component.id}`}>
-                        {component.category}
+                      <Badge className={`${getCategoryColor(component.category)} whitespace-nowrap text-base px-3 py-1`} data-testid={`badge-category-${component.id}`}>
+                        {t(`category.${component.category}`)}
                       </Badge>
                     </TableCell>
                     <TableCell className="px-6 py-4">
@@ -179,7 +184,7 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
                         </Button>
                         <Input
                           type="number"
-                          className="w-16 text-center"
+                          className="w-20 text-center text-base font-medium"
                           value={component.quantity}
                           onChange={(e) => handleQuantityChange(component, parseInt(e.target.value) || 0)}
                           disabled={updateQuantityMutation.isPending}
@@ -197,15 +202,29 @@ export default function ComponentsTable({ components, isLoading }: ComponentsTab
                         </Button>
                       </div>
                     </TableCell>
-                    <TableCell className="px-6 py-4 text-sm text-muted-foreground" data-testid={`text-location-${component.id}`}>
+                    <TableCell className="px-6 py-4 text-base text-muted-foreground" data-testid={`text-location-${component.id}`}>
                       {component.location}
                     </TableCell>
+                    <TableCell className="px-6 py-4 text-base text-muted-foreground" data-testid={`text-specifications-${component.id}`}>
+                      {component.specifications && Object.keys(component.specifications).length > 0 ? (
+                        <div className="space-y-1">
+                          {Object.entries(component.specifications).map(([key, value]) => (
+                            value && <div key={key} className="flex items-center gap-1.5">
+                              <span className="font-medium text-foreground text-base">{t(`spec.${key}`)}:</span>
+                              <span className="text-base">{String(value)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground/50">-</span>
+                      )}
+                    </TableCell>
                     <TableCell className="px-6 py-4">
-                      <div className="flex items-center">
+                      <div className="flex items-center whitespace-nowrap">
                         <div className={`w-2 h-2 ${status.dotColor} rounded-full mr-2`}></div>
-                        <span className={`text-sm font-medium ${
-                          status.label === "Low Stock" ? "text-amber-600" : 
-                          status.label === "Out of Stock" ? "text-destructive" : 
+                        <span className={`text-base font-medium ${
+                          status.label === "Low Stock" || status.label === "库存不足" ? "text-amber-600" : 
+                          status.label === "Out of Stock" || status.label === "缺货" ? "text-destructive" : 
                           "text-foreground"
                         }`} data-testid={`text-status-${component.id}`}>
                           {status.label}

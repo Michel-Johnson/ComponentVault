@@ -191,7 +191,8 @@ export class FileStorage implements IStorage {
       quantity: insertComponent.quantity ?? 0,
       location: insertComponent.location,
       description: insertComponent.description,
-      minStockLevel: insertComponent.minStockLevel ?? 10
+      minStockLevel: insertComponent.minStockLevel ?? 10,
+      specifications: insertComponent.specifications
     };
     this.components.set(id, component);
     await this.saveComponents();
@@ -354,7 +355,8 @@ export class MemStorage implements IStorage {
       quantity: insertComponent.quantity ?? 0,
       location: insertComponent.location,
       description: insertComponent.description,
-      minStockLevel: insertComponent.minStockLevel ?? 10
+      minStockLevel: insertComponent.minStockLevel ?? 10,
+      specifications: insertComponent.specifications
     };
     this.components.set(id, component);
     return component;
